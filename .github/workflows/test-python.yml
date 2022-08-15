@@ -1,0 +1,34 @@
+name: Test Python project
+
+on:
+  workflow_call:
+    inputs:
+      python_version:
+        type: string
+        required: true
+
+jobs:
+  test-python:
+    name: Lint and test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python_version }}
+
+      - name: Install python dependencies with poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python - --version 1.1.14
+          poetry install
+
+      - name: Run python linters
+        run: |
+          poetry run black --check .
+          poetry run flake8 .
+
+      - name: Run python tests
+        run: poetry run pytest
