@@ -6,6 +6,9 @@ on:
       python_version:
         type: string
         required: true
+      poetry_version:
+        type: string
+        required: true
 
 jobs:
   test-python:
@@ -22,7 +25,7 @@ jobs:
 
       - name: Install python dependencies with poetry
         run: |
-          curl -sSL https://install.python-poetry.org | python - --version 1.1.14
+          curl -sSL https://install.python-poetry.org | python - --version ${{ inputs.poetry_version }}
           poetry install
 
       - name: Run python linters
